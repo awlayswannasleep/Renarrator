@@ -1,0 +1,15 @@
+{
+  "name": "renarrator",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Renarrator — фоновый движок триггер-звуков по вводу с клавиатуры (Rust + Tauri v2)",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

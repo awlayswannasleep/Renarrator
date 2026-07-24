@@ -1,0 +1,633 @@
+/* ============================================================
+   Renarrator — Liquid Glass design system (white monochrome)
+   Blur: OS acrylic (window effects). Material: layered white
+   translucency + specular sheen + 1px rim highlights.
+   ============================================================ */
+
+/* ---------- Manrope (local, offline-safe) ---------- */
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-latin-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-cyrillic-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-latin-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-cyrillic-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-latin-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-cyrillic-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-latin-800.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/manrope-cyrillic-800.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* ---------- Glass tokens (only white) ---------- */
+:root {
+  --glass-hi: rgba(255, 255, 255, 0.16);
+  --glass: rgba(255, 255, 255, 0.075);
+  --glass-lo: rgba(255, 255, 255, 0.045);
+  --glass-faint: rgba(255, 255, 255, 0.022);
+  --stroke: rgba(255, 255, 255, 0.30);
+  --stroke-lo: rgba(255, 255, 255, 0.13);
+  --text: rgba(255, 255, 255, 0.97);
+  --text-dim: rgba(255, 255, 255, 0.68);
+  --text-faint: rgba(255, 255, 255, 0.44);
+  --ink-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.4);
+  --radius-win: 22px;
+  --radius-card: 16px;
+  --radius-ctl: 12px;
+  --font: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Reset / base ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
+  text-shadow: var(--ink-shadow);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* ---------- Window shell (glass pane) ---------- */
+.window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  border-radius: var(--radius-win);
+  overflow: hidden;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.022) 42%,
+    rgba(255, 255, 255, 0.032) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.07),
+    inset 1px 0 0 rgba(255, 255, 255, 0.10),
+    inset -1px 0 0 rgba(255, 255, 255, 0.10);
+  animation: window-in 0.28s var(--ease-out);
+}
+/* specular sheen, деформированный SVG-displacement — «жидкая» кромка */
+.window::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: -10%;
+  width: 70%;
+  height: 150px;
+  background: radial-gradient(
+    90% 100% at 30% 0%,
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 75%
+  );
+  filter: url(#liquid-soft);
+  pointer-events: none;
+  z-index: 0;
+}
+.window > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes window-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Custom titlebar ---------- */
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding-left: 18px;
+  flex: 0 0 auto;
+  -webkit-app-region: drag;
+}
+.titlebar .brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.win-controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+.win-btn {
+  width: 46px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.win-btn:hover {
+  background: var(--glass);
+  color: var(--text);
+}
+.win-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ---------- Content layout ---------- */
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 2px 20px 18px;
+}
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 2px 16px;
+}
+.page-title {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Glass cards ---------- */
+.card {
+  background: rgba(255, 255, 255, 0.032);
+  border: 1px solid var(--stroke-lo);
+  border-radius: var(--radius-card);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 8px 24px rgba(0, 0, 0, 0.10);
+  animation: card-in 0.4s var(--ease-out) backwards;
+}
+.card:nth-of-type(2) {
+  animation-delay: 0.06s;
+}
+.card h2 {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 12px;
+  text-shadow: none;
+}
+.card .row > h2 {
+  margin-bottom: 0;
+}
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+.row.spread {
+  justify-content: space-between;
+}
+.row.nowrap {
+  margin: 0;
+  gap: 6px;
+}
+
+.hint {
+  color: var(--text-faint);
+  font-size: 12px;
+  margin-bottom: 12px;
+  text-shadow: none;
+}
+.mono {
+  font-variant-numeric: tabular-nums;
+  min-width: 48px;
+  text-align: right;
+  font-weight: 700;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--glass-lo);
+  border: 1px solid var(--stroke-lo);
+  border-radius: var(--radius-ctl);
+  color: var(--text);
+  padding: 8px 14px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.16s var(--ease-out), border-color 0.16s,
+    transform 0.16s var(--ease-out), box-shadow 0.16s;
+  text-shadow: var(--ink-shadow);
+  white-space: nowrap;
+}
+.btn svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+.btn:hover {
+  background: var(--glass);
+  border-color: var(--stroke);
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0) scale(0.97);
+}
+.btn-primary {
+  background: var(--glass-hi);
+  border-color: rgba(255, 255, 255, 0.45);
+  font-weight: 800;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 4px 18px rgba(255, 255, 255, 0.06);
+}
+.btn-primary:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+.btn-icon {
+  padding: 7px;
+  border-radius: 10px;
+}
+.btn-warn.active {
+  background: var(--glass-hi);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Inputs ---------- */
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--stroke-lo);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: none;
+  user-select: text;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.09);
+}
+input::placeholder {
+  color: var(--text-faint);
+}
+input[type="number"] {
+  padding-right: 4px;
+}
+
+label {
+  min-width: 170px;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Custom checkbox ---------- */
+label.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+label.check input {
+  appearance: none;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  border-radius: 7px;
+  border: 1px solid var(--stroke);
+  background: var(--glass-lo);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+label.check input::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  margin-top: -2px;
+  border-left: 2.5px solid #fff;
+  border-bottom: 2.5px solid #fff;
+  transform: rotate(-45deg) scale(0);
+  transition: transform 0.16s var(--ease-out);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+label.check input:checked {
+  background: rgba(255, 255, 255, 0.20);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+label.check input:checked::after {
+  transform: rotate(-45deg) scale(1);
+}
+
+/* ---------- Range slider ---------- */
+input[type="range"] {
+  appearance: none;
+  flex: 1;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.12s var(--ease-out);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+}
+
+/* ---------- Trigger card ---------- */
+.trigger {
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid var(--stroke-lo);
+  border-radius: var(--radius-card);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+.trigger .t-name {
+  font-weight: 700;
+}
+
+/* ---------- Sounds table ---------- */
+.sounds {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 4px;
+}
+.sounds th {
+  text-align: left;
+  color: var(--text-faint);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  text-shadow: none;
+}
+.sounds td {
+  padding: 4px 6px 4px 0;
+  vertical-align: middle;
+}
+.sounds td:last-child {
+  padding-right: 0;
+}
+.sounds .s-volume,
+.sounds .s-weight {
+  width: 72px;
+}
+
+/* Колонка Weight скрыта, когда у триггера один звук (выбор не нужен). */
+.trigger.single-sound .th-weight,
+.trigger.single-sound .td-weight {
+  display: none;
+}
+
+/* Путь к файлу: только имя (readonly), но с кликабельным видом. */
+.s-path {
+  cursor: default;
+  text-overflow: ellipsis;
+}
+.sound.drop-target .s-path,
+.s-path:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14);
+}
+/* Подсветка строки-цели при перетаскивании файла. */
+.sound.drop-target td {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Footer / status ---------- */
+.footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--stroke-lo);
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.025),
+    rgba(255, 255, 255, 0.01)
+  );
+}
+.status {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-dim);
+  white-space: pre-line;
+}
+.status.ok {
+  color: var(--text);
+}
+.status.err {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* ---------- Scrollbar ---------- */
+.content::-webkit-scrollbar {
+  width: 9px;
+}
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+  background-clip: content-box;
+}
+
+/* ============================================================
+   Tray context menu (window "tray-menu")
+   ============================================================ */
+body.menu {
+  overflow: hidden;
+}
+body.menu .window {
+  border-radius: 16px;
+  padding: 6px;
+  display: block;
+  animation: menu-pop 0.16s var(--ease-out);
+  transform-origin: bottom left;
+}
+@keyframes menu-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.menu-brand {
+  padding: 7px 10px 5px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  text-shadow: none;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  text-shadow: var(--ink-shadow);
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+}
+.menu-item:hover {
+  background: var(--glass);
+  border-color: var(--stroke-lo);
+}
+.menu-item:active {
+  transform: scale(0.98);
+}
+.menu-item svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  opacity: 0.85;
+}
+.menu-item .spacer {
+  flex: 1;
+}
+.menu-item .check-mark {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.menu-item.checked .check-mark {
+  opacity: 1;
+}
+.menu-sep {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.10);
+  margin: 5px 9px;
+}

@@ -1,0 +1,21 @@
+# Rust
+/target
+/src-tauri/target
+/src-tauri/gen
+
+# Node
+/node_modules
+
+# Transient build/test logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Скриншот рабочего стола из dev-сессий (не для репо)
+shot.png
+
+# Ключи подписи обновлений — НИКОГДА не коммитить
+*.key

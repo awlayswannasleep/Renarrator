@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Renarrator Menu</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="menu">
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <filter id="liquid-soft" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.012 0.03"
+          numOctaves="2"
+          seed="7"
+          result="noise"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="noise"
+          scale="24"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </svg>
+
+    <div class="window">
+      <div class="menu-brand">Renarrator</div>
+
+      <button class="menu-item" id="mi-open" type="button">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M2 4.5h12M2 11.5h12" />
+          <circle cx="6" cy="4.5" r="1.9" fill="currentColor" stroke="none" />
+          <circle cx="10" cy="11.5" r="1.9" fill="currentColor" stroke="none" />
+        </svg>
+        <span>Open Settings</span>
+      </button>
+
+      <button class="menu-item" id="mi-pause" type="button">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M5.5 3v10M10.5 3v10" />
+        </svg>
+        <span id="pause-label">Pause Detection</span>
+        <span class="spacer"></span>
+        <svg class="check-mark" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2.5 7.5l3 3 6-7" />
+        </svg>
+      </button>
+
+      <div class="menu-sep"></div>
+
+      <button class="menu-item" id="mi-quit" type="button">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M8 2v6" />
+          <path d="M12 4.6a5 5 0 1 1-8 0" />
+        </svg>
+        <span>Quit</span>
+      </button>
+    </div>
+
+    <script src="tray-menu.js"></script>
+  </body>
+</html>

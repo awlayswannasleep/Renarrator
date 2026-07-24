@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Renarrator — Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- SVG displacement filter: organic "liquid" edge for the glass sheen -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <filter id="liquid-soft" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.012 0.03"
+          numOctaves="2"
+          seed="7"
+          result="noise"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="noise"
+          scale="24"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </svg>
+
+    <div class="window">
+      <div class="titlebar" data-tauri-drag-region>
+        <span class="brand" data-tauri-drag-region>Renarrator</span>
+        <div class="win-controls">
+          <button id="win-close" class="win-btn" type="button" title="Hide to tray">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M2 2l8 8M10 2l-8 8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="page-head">
+          <div class="page-title">Settings</div>
+          <button id="pause-btn" class="btn btn-warn" type="button">Pause Detection</button>
+        </div>
+
+        <section class="card">
+          <h2>General</h2>
+          <div class="row">
+            <label for="master-volume">Master volume</label>
+            <input id="master-volume" type="range" min="0" max="100" step="1" />
+            <span id="master-volume-label" class="mono">80%</span>
+          </div>
+          <div class="row">
+            <label class="check">
+              <input id="allow-overlap" type="checkbox" />
+              <span>Allow sound overlap (polyphony)</span>
+            </label>
+          </div>
+          <div class="row">
+            <label class="check">
+              <input id="auto-start" type="checkbox" />
+              <span>Launch with Windows</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="row spread">
+            <h2>Triggers</h2>
+            <button id="add-trigger" class="btn" type="button">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M6 1.5v9M1.5 6h9" />
+              </svg>
+              <span>Add Trigger</span>
+            </button>
+          </div>
+          <div id="triggers"></div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <button id="save" class="btn btn-primary" type="button">Save</button>
+        <span id="status" class="status"></span>
+      </footer>
+    </div>
+
+    <template id="trigger-template">
+      <div class="trigger">
+        <div class="row">
+          <input class="t-name" type="text" placeholder="Trigger name" />
+          <button class="btn btn-icon t-delete" type="button" title="Delete trigger">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M2 2l8 8M10 2l-8 8" />
+            </svg>
+          </button>
+        </div>
+        <div class="row">
+          <label>Words (comma-separated)</label>
+          <input class="t-words" type="text" placeholder="banana, банан яблоко, banan" />
+        </div>
+        <table class="sounds">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Vol.</th>
+              <th class="th-weight">Weight</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="t-sounds"></tbody>
+        </table>
+        <button class="btn t-add-sound" type="button">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M6 1.5v9M1.5 6h9" />
+          </svg>
+          <span>Add Sound</span>
+        </button>
+      </div>
+    </template>
+
+    <template id="sound-template">
+      <tr class="sound">
+        <td>
+          <div class="row nowrap">
+            <input
+              class="s-path"
+              type="text"
+              placeholder="Drop a file or browse"
+              readonly
+              tabindex="-1"
+            />
+            <button class="btn btn-icon s-browse" type="button" title="Browse">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+                <path d="M1.5 4c0-.6.4-1 1-1h2l1 1.2h4c.6 0 1 .4 1 1V9.5c0 .6-.4 1-1 1h-7c-.6 0-1-.4-1-1V4z" />
+              </svg>
+            </button>
+          </div>
+        </td>
+        <td><input class="s-volume" type="number" min="0" max="100" step="5" /></td>
+        <td class="td-weight"><input class="s-weight" type="number" min="0" max="1000" step="1" /></td>
+        <td class="row nowrap">
+          <button class="btn btn-icon s-test" type="button" title="Play">
+            <svg viewBox="0 0 12 12">
+              <path d="M3.5 2.2l6.5 3.8-6.5 3.8z" fill="currentColor" />
+            </svg>
+          </button>
+          <button class="btn btn-icon s-delete" type="button" title="Delete">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M2 2l8 8M10 2l-8 8" />
+            </svg>
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="main.js"></script>
+  </body>
+</html>
