@@ -3,7 +3,7 @@
   <h1>Renarrator</h1>
   <p>
     <b>A background engine for play-on-typing audio triggers.</b><br/>
-    Type a word — Windows plays a sound. Lives in the tray, layout-independent.
+    Type a word - Windows plays a sound. Lives in the tray, layout-independent.
   </p>
   <p>
     <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white" alt="platform" />
@@ -19,7 +19,7 @@
 
 Renarrator is a background application for Windows that monitors physical keyboard input across **any** application and instantly plays a sound effect when a typed word matches one of your triggers.
 
-Type `banana` in a chat, a game, or a text editor — get a sound. The keyboard layout (Russian/English) doesn't matter: the engine compares **physical keys** rather than characters, so `banana` and its layout equivalent are treated as the exact same word by the trigger.
+Type `banana` in a chat, a game, or a text editor - get a sound. The keyboard layout (Russian/English) doesn't matter: the engine compares **physical keys** rather than characters, so `banana` and its layout equivalent are treated as the exact same word by the trigger.
 
 ## Features
 
@@ -30,7 +30,7 @@ Type `banana` in a chat, a game, or a text editor — get a sound. The keyboard 
 - **Flexible Volume Controls** - Master volume × individual file volume.
 - **Supported Audio Formats**: `.mp3`, `.wav`, `.ogg` (`rodio` engine / WASAPI).
 - **System Tray Integration** - Left-click the icon to open settings; right-click for a quick menu (pause detection / stop all sounds / exit).
-- **Drag & Drop** — Drag audio files directly onto the sound line in settings.
+- **Drag & Drop** - Drag audio files directly onto the sound line in settings.
 - **Windows Startup** - Optional autorun via `HKCU\...\Run`.
 - **Glass UI** - Acrylic blur and rounded corners via DWM, featuring a custom title bar.
 
