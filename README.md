@@ -2,8 +2,8 @@
   <img src="renarrator.png" width="180" alt="Renarrator logo" />
   <h1>Renarrator</h1>
   <p>
-    <b>Фоновый движок триггер-звуков по вводу с клавиатуры.</b><br/>
-    Печатаешь слово — Windows играет звук. Живёт в трее, не зависит от раскладки.
+    <b>A background engine for play-on-typing audio triggers.</b><br/>
+    Type a word — Windows plays a sound. Lives in the tray, layout-independent.
   </p>
   <p>
     <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white" alt="platform" />
@@ -13,110 +13,93 @@
   </p>
 </div>
 
-![Окно настроек Renarrator](docs/settings-window.png)
+![Renarrator Settings Window](docs/settings-window.png)
 
-## Что это
+## What It Is
 
-Renarrator — фоновое приложение для Windows, которое отслеживает ввод с физической
-клавиатуры в **любом** приложении и при совпадении набранного слова с одним из
-твоих триггеров мгновенно воспроизводит звуковой эффект.
+Renarrator is a background application for Windows that monitors physical keyboard input across **any** application and instantly plays a sound effect when a typed word matches one of your triggers.
 
-Набрал `банан` в чате, в игре, в блокноте — получил звук. Раскладка клавиатуры
-(русская/английская) значения не имеет: движок сравнивает **физические клавиши**,
-а не символы, поэтому `banan` и `ифтфт` — это одно и то же слово для триггера.
+Type `banana` in a chat, a game, or a text editor — get a sound. The keyboard layout (Russian/English) doesn't matter: the engine compares **physical keys** rather than characters, so `banana` and its layout equivalent are treated as the exact same word by the trigger.
 
-## Возможности
+## Features
 
-- **Глобальный перехват клавиатуры** — low-level hook (WinAPI `WH_KEYBOARD_LL` через `rdev`),
-  работает поверх любых приложений без фокуса на окне.
-- **Раскладка-независимые триггеры: слова, цифры и фразы** — mapping физических
-  клавиш → символы, регистр не важен. Триггером может быть слово (`банан`),
-  цифровой код (`123`) или фраза с пробелом (`банан яблоко` — срабатывает
-  на последней букве, финальный пробел не нужен). `Enter`/`Backspace` и пауза
-  > 2 с сбрасывают буфер; `Space` — разделитель слов внутри фразы.
-- **Несколько звуков на триггер с весами** — взвешенный случайный выбор
-  (`P = weight / Σweights`), чтобы мемы не приедались.
-- **Полифония / overlap** — звуки накладываются друг на друга либо прерывают
-  предыдущие (переключается одной галочкой).
-- **Гибкая громкость** — master-громкость × громкость каждого файла.
-- **Форматы аудио**: `.mp3`, `.wav`, `.ogg` (движок `rodio` / WASAPI).
-- **Системный трей** — ЛКМ по иконке открывает настройки, ПКМ — быстрое меню
-  (пауза детекции / стоп всех звуков / выход).
-- **Drag & drop** — перетащи аудиофайл прямо в строку звука в настройках.
-- **Автозагрузка Windows** — опционально, через `HKCU\...\Run`.
-- **Стеклянный UI** — acrylic blur и скруглённые углы через DWM, кастомный титлбар.
+- **Global Keyboard Intercept** — Low-level hook (WinAPI `WH_KEYBOARD_LL` via `rdev`), works on top of any active application without requiring window focus.
+- **Layout-Independent Triggers: Words, Numbers, and Phrases** — Maps physical keys to characters, case-insensitive. A trigger can be a single word (`banana`), a numeric code (`123`), or a multi-word phrase (`banana apple` — triggers on the last letter, no trailing space required). `Enter`/`Backspace` and a pause longer than 2 seconds clear the buffer; `Space` acts as a word separator within phrases.
+- **Multiple Sounds per Trigger with Weights** — Weighted random selection (`P = weight / Σweights`) to keep sound effects from feeling repetitive.
+- **Polyphony / Overlap** — Sounds can overlap or interrupt previous ones (toggled with a single checkbox).
+- **Flexible Volume Controls** — Master volume × individual file volume.
+- **Supported Audio Formats**: `.mp3`, `.wav`, `.ogg` (`rodio` engine / WASAPI).
+- **System Tray Integration** — Left-click the icon to open settings; right-click for a quick menu (pause detection / stop all sounds / exit).
+- **Drag & Drop** — Drag audio files directly onto the sound line in settings.
+- **Windows Startup** — Optional autorun via `HKCU\...\Run`.
+- **Glass UI** — Acrylic blur and rounded corners via DWM, featuring a custom title bar.
 
-## Установка (для пользователя)
+## Installation (User Guide)
 
-1. Открой страницу [Releases](https://github.com/reteren/renarrator/releases).
-2. Скачай `Renarrator_x.x.x_x64-setup.exe` из последнего релиза.
-3. Запусти установщик (NSIS) — ярлык появится в меню «Пуск».
-4. После запуска приложение сидит в трее. ЛКМ по иконке → настройки:
-   добавь триггер, впиши слова, перетащи звуки, нажми **Save**.
+1. Go to the [Releases](https://github.com/reteren/renarrator/releases) page.
+2. Download `Renarrator_x.x.x_x64-setup.exe` from the latest release.
+3. Run the installer (NSIS) — a shortcut will appear in the Start menu.
+4. After launching, the app sits in the system tray. Left-click the icon → settings: add a trigger, enter words, drag and drop sounds, and click **Save**.
 
-> Windows SmartScreen может предупредить о неподписанном установщике
-> (код не подписан сертификатом EV) — «Подробнее → Выполнить в любом случае».
+> Windows SmartScreen may display a warning about an unsigned installer (code is not signed with an EV certificate) — click "More info → Run anyway".
 
-### Где лежит конфиг
+### Configuration Location
 
-`%APPDATA%\KeySoundTrigger\config.json` — создаётся автоматически при первом
-запуске, можно править руками (приложение подхватит при следующем сохранении).
+`%APPDATA%\KeySoundTrigger\config.json` — Automatically created on the first launch; can be edited manually (the app will apply changes on the next save).
 
-### Приватность
+### Privacy
 
-Буфер нажатий живёт **только в оперативной памяти**, сбрасывается после каждого
-слова и никуда не отправляется. Приложение вообще не обращается к сети.
+The keystroke buffer exists **solely in RAM**, resets after each word, and is never transmitted anywhere. The application makes no network requests whatsoever.
 
-## Сборка из исходников
+## Building from Source
 
-**Требования:** Windows 10/11, [Rust stable (MSVC)](https://rustup.rs/),
-[Node.js 18+](https://nodejs.org/), Visual Studio Build Tools (рабочая нагрузка
-«C++ build tools»), WebView2 (в Windows 11 встроен).
+**Requirements:** Windows 10/11, [Rust stable (MSVC)](https://rustup.rs/), [Node.js 18+](https://nodejs.org/), Visual Studio Build Tools ("Desktop development with C++" workload), WebView2 (built into Windows 11).
 
 ```powershell
-git clone https://github.com/reteren/renarrator.git
+git clone [https://github.com/reteren/renarrator.git](https://github.com/reteren/renarrator.git)
 cd renarrator
 npm install
 
-# dev-режим (hot-reload UI)
+# Dev mode (hot-reload UI)
 npm run dev
 
-# релизная сборка → src-tauri\target\release\bundle\nsis\
+# Production build → src-tauri\target\release\bundle\nsis\
 npm run build
+
 ```
 
-## Выпуск релиза (для мейнтейнера)
+## Creating a Release (For Maintainers)
 
 ```powershell
 git tag v0.2.0
 git push origin v0.2.0
-```
-
-GitHub Actions (`.github/workflows/release.yml`) соберёт NSIS-установщик и
-опубликует релиз с артефактом `Renarrator_x64-setup.exe` — пользователям
-достаточно скачать и запустить его.
-
-## Структура проекта
 
 ```
-├─ src/                     # фронтенд (vanilla JS, без сборщика)
-│  ├─ index.html            # окно настроек
-│  ├─ tray-menu.html        # кастомное меню трея
+
+GitHub Actions (`.github/workflows/release.yml`) will build the NSIS installer and publish a release with the `Renarrator_x64-setup.exe` artifact — users can simply download and run it.
+
+## Project Structure
+
+```
+├─ src/                     # Frontend (vanilla JS, no bundler)
+│  ├─ index.html            # Settings window
+│  ├─ tray-menu.html        # Custom tray menu
 │  └─ fonts/                # Manrope (woff2)
 ├─ src-tauri/
 │  ├─ src/
-│  │  ├─ lib.rs             # точка сборки: окна, трей, Tauri commands, updater
-│  │  ├─ keyboard_hook.rs   # глобальный low-level hook (rdev)
-│  │  ├─ layout_map.rs      # физические клавиши → символы (RU/EN)
-│  │  ├─ buffer_manager.rs  # буфер ввода, таймауты, матчинг слов
-│  │  ├─ audio_engine.rs    # rodio: полифония, веса, громкость
+│  │  ├─ lib.rs             # Entry point: windows, tray, Tauri commands, updater
+│  │  ├─ keyboard_hook.rs   # Global low-level hook (rdev)
+│  │  ├─ layout_map.rs      # Physical keys → characters (RU/EN)
+│  │  ├─ buffer_manager.rs  # Input buffer, timeouts, word matching
+│  │  ├─ audio_engine.rs    # rodio: polyphony, weights, volume
 │  │  ├─ config.rs          # %APPDATA%\KeySoundTrigger\config.json
-│  │  ├─ autostart.rs       # автозагрузка через реестр
-│  │  └─ win_glass.rs       # DWM acrylic + скруглённые регионы
+│  │  ├─ autostart.rs       # Startup via Windows registry
+│  │  └─ win_glass.rs       # DWM acrylic + rounded regions
 │  └─ tauri.conf.json
-└─ .github/workflows/       # CI релизов
+└─ .github/workflows/       # Release CI
+
 ```
 
-## Лицензия
+## License
 
-[MIT](LICENSE) © reteren
+[MIT](https://www.google.com/search?q=LICENSE) © reteren
