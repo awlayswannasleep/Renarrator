@@ -23,29 +23,29 @@ Type `banana` in a chat, a game, or a text editor — get a sound. The keyboard 
 
 ## Features
 
-- **Global Keyboard Intercept** — Low-level hook (WinAPI `WH_KEYBOARD_LL` via `rdev`), works on top of any active application without requiring window focus.
-- **Layout-Independent Triggers: Words, Numbers, and Phrases** — Maps physical keys to characters, case-insensitive. A trigger can be a single word (`banana`), a numeric code (`123`), or a multi-word phrase (`banana apple` — triggers on the last letter, no trailing space required). `Enter`/`Backspace` and a pause longer than 2 seconds clear the buffer; `Space` acts as a word separator within phrases.
-- **Multiple Sounds per Trigger with Weights** — Weighted random selection (`P = weight / Σweights`) to keep sound effects from feeling repetitive.
-- **Polyphony / Overlap** — Sounds can overlap or interrupt previous ones (toggled with a single checkbox).
-- **Flexible Volume Controls** — Master volume × individual file volume.
+- **Global Keyboard Intercept** - Low-level hook (WinAPI `WH_KEYBOARD_LL` via `rdev`), works on top of any active application without requiring window focus.
+- **Layout-Independent Triggers: Words, Numbers, and Phrases** - Maps physical keys to characters, case-insensitive. A trigger can be a single word (`banana`), a numeric code (`123`), or a multi-word phrase (`banana apple` - triggers on the last letter, no trailing space required). `Enter`/`Backspace` and a pause longer than 2 seconds clear the buffer; `Space` acts as a word separator within phrases.
+- **Multiple Sounds per Trigger with Weights** - Weighted random selection (`P = weight / Σweights`) to keep sound effects from feeling repetitive.
+- **Polyphony / Overlap** - Sounds can overlap or interrupt previous ones (toggled with a single checkbox).
+- **Flexible Volume Controls** - Master volume × individual file volume.
 - **Supported Audio Formats**: `.mp3`, `.wav`, `.ogg` (`rodio` engine / WASAPI).
-- **System Tray Integration** — Left-click the icon to open settings; right-click for a quick menu (pause detection / stop all sounds / exit).
+- **System Tray Integration** - Left-click the icon to open settings; right-click for a quick menu (pause detection / stop all sounds / exit).
 - **Drag & Drop** — Drag audio files directly onto the sound line in settings.
-- **Windows Startup** — Optional autorun via `HKCU\...\Run`.
-- **Glass UI** — Acrylic blur and rounded corners via DWM, featuring a custom title bar.
+- **Windows Startup** - Optional autorun via `HKCU\...\Run`.
+- **Glass UI** - Acrylic blur and rounded corners via DWM, featuring a custom title bar.
 
 ## Installation (User Guide)
 
 1. Go to the [Releases](https://github.com/reteren/renarrator/releases) page.
 2. Download `Renarrator_x.x.x_x64-setup.exe` from the latest release.
-3. Run the installer (NSIS) — a shortcut will appear in the Start menu.
+3. Run the installer (NSIS) - a shortcut will appear in the Start menu.
 4. After launching, the app sits in the system tray. Left-click the icon → settings: add a trigger, enter words, drag and drop sounds, and click **Save**.
 
-> Windows SmartScreen may display a warning about an unsigned installer (code is not signed with an EV certificate) — click "More info → Run anyway".
+> Windows SmartScreen may display a warning about an unsigned installer (code is not signed with an EV certificate) - click "More info → Run anyway".
 
 ### Configuration Location
 
-`%APPDATA%\KeySoundTrigger\config.json` — Automatically created on the first launch; can be edited manually (the app will apply changes on the next save).
+`%APPDATA%\KeySoundTrigger\config.json` - Automatically created on the first launch; can be edited manually (the app will apply changes on the next save).
 
 ### Privacy
 
